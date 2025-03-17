@@ -24,7 +24,68 @@ Step 2: Create the ProductProcessor Class
     Calculate the average price of all products using Collectors.averagingDouble().
 - Display the results.
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+  import java.util.*;
+import java.util.stream.Collectors;
 
+class Product {
+    String name;
+    String category;
+    double price;
+    
+    public Product(String name, String category, double price) {
+        this.name = name;
+        this.category = category;
+        this.price = price;
+    }
+    
+    public void display() {
+        System.out.println(name + " (Category: " + category + ", Price: " + price + ")");
+    }
+}
+
+public class ProductProcessor {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Product> products = new ArrayList<>();
+        
+        System.out.print("Enter number of products: ");
+        int n = scanner.nextInt();
+        scanner.nextLine();
+        
+        for (int i = 0; i < n; i++) {
+            System.out.println("Enter details for Product " + (i + 1) + " (name, category, price):");
+            String name = scanner.nextLine();
+            String category = scanner.nextLine();
+            double price = scanner.nextDouble();
+            scanner.nextLine();
+            products.add(new Product(name, category, price));
+        }
+        
+        Map<String, List<Product>> groupedByCategory = products.stream()
+            .collect(Collectors.groupingBy(p -> p.category));
+            
+        System.out.println("\nProducts Grouped by Category:");
+        groupedByCategory.forEach((category, productList) -> {
+            System.out.println(category + ":");
+            productList.forEach(Product::display);
+        });
+        
+        Map<String, Optional<Product>> mostExpensiveByCategory = products.stream()
+            .collect(Collectors.groupingBy(p -> p.category,
+                Collectors.maxBy(Comparator.comparingDouble(p -> p.price))));
+                
+        System.out.println("\nMost Expensive Product in Each Category:");
+        mostExpensiveByCategory.forEach((category, product) ->
+            System.out.println(category + ": " + product.map(p -> p.name + " (" + p.price + ")").orElse("No product")));
+            
+        double averagePrice = products.stream()
+            .collect(Collectors.averagingDouble(p -> p.price));
+            
+        System.out.println("\nAverage Price of All Products: " + averagePrice);
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
   
     Test Cases
     Test Case	                                     Input Data	                                                                           Expected Output
