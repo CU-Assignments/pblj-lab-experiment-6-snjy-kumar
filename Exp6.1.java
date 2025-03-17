@@ -17,7 +17,57 @@ Step 2: Create the Main Class
   
 Step 3: Display the Sorted List
 Use forEach() with a method reference to print the sorted employees.
+-----------------------------------------------------------------------------------------------
+import java.util.*;
 
+class Employee {
+    String name;
+    int age;
+    double salary;
+    
+    public Employee(String name, int age, double salary) {
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+    }
+    
+    public void display() {
+        System.out.println(name + " (Age: " + age + ", Salary: " + salary + ")");
+    }
+}
+
+public class EmployeeSorting {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Employee> employees = new ArrayList<>();
+        
+        System.out.print("Enter number of employees: ");
+        int n = scanner.nextInt();
+        scanner.nextLine();
+        
+        for (int i = 0; i < n; i++) {
+            System.out.println("Enter details for Employee " + (i + 1) + " (name, age, salary):");
+            String name = scanner.nextLine();
+            int age = scanner.nextInt();
+            double salary = scanner.nextDouble();
+            scanner.nextLine();
+            employees.add(new Employee(name, age, salary));
+        }
+        
+        System.out.println("\nSorting by Name:");
+        employees.sort((e1, e2) -> e1.name.compareTo(e2.name));
+        employees.forEach(Employee::display);
+        
+        System.out.println("\nSorting by Age:");
+        employees.sort((e1, e2) -> Integer.compare(e1.age, e2.age));
+        employees.forEach(Employee::display);
+        
+        System.out.println("\nSorting by Salary (Descending):");
+        employees.sort((e1, e2) -> Double.compare(e2.salary, e1.salary));
+        employees.forEach(Employee::display);
+    }
+}
+-----------------------------------------------------------------------------------------------
 
 Test Cases
 Test Case         	Input Data                                                      	                    Expected Output
